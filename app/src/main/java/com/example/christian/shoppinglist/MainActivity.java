@@ -31,11 +31,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.zip.GZIPInputStream;
+import android.view.inputmethod.InputMethodManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                             descText.getText().clear();
 
                             mainLayout.requestFocus();
+                            closeKeyboard();
                         }
 
                     }
@@ -213,6 +214,10 @@ public class MainActivity extends AppCompatActivity {
                                             LISTPROPERTIES.remove(position);
                                             shoppingList.invalidateViews();
                                             setAdapter();
+                                            if (SHPLIST.isEmpty())
+                                            {
+                                                remBtn.setEnabled(false);
+                                            }
                                         }
 
                                     }
@@ -290,6 +295,9 @@ public class MainActivity extends AppCompatActivity {
             FileWriter writer = new FileWriter(gpxFile, true);
             writer.append("#" + currDate + "\n");
             int itemNum = 0; //Used to track the item number to get appropriate attribute
+            if (SHPLIST.isEmpty()) {
+                throw new Exception("The List was empty. Can only save instance of populated list.");
+            }
             for (String item : SHPLIST) {
                 writer.append("Item: " + item + " " + LISTPROPERTIES.get(itemNum).quantity + " " + LISTPROPERTIES.get(itemNum).completeWeight + " <Start>" +LISTPROPERTIES.get(itemNum).description + "<End>\n");
                 itemNum++;
@@ -301,6 +309,22 @@ public class MainActivity extends AppCompatActivity {
         }
         catch(IOException e) {
             e.printStackTrace();
+        }
+        catch (Exception ex) {
+            Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void closeKeyboard() {
+        InputMethodManager inputManager = (InputMethodManager)this.getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
+        inputManager.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+    }
+
+    private void openKeyboard() {
+        InputMethodManager imm = (InputMethodManager) this.getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
+        if(imm != null){
+            imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0);
         }
     }
 
