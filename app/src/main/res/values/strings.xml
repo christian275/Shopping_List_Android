@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">ShoppingList</string>
+    <string name="button">Add</string>
+    <string name="button2">Remove</string>
+    <string name="textView">Quantity</string>
+    <string name="textView2">Weight/PortionSize</string>
+    <string name="action_favorite">Favorite</string>
+    <string name="save_option">Save</string>
+    <string name="load_option">Load</string>
+    <string name="item_hint">Enter Item Here</string>
+    <string name="item_description">Item Description</string>
+</resources>
